@@ -1,0 +1,78 @@
+select  a.record_no,
+        transaction_id, 
+        case 
+        when   substring(a.transaction_date_time, ,2,1) = '/' and  substring(a.transaction_date_time,4,1) = '/' then
+        concat(substring(a.transaction_date_time,5,4),'0',substring(a.transaction_date_time,1,1),'0',substring(a.transaction_date_time,3,1))
+        
+        when   substring(a.transaction_date_time,2,1) = '/' and  substring(a.transaction_date_time,5,1) = '/' then
+        concat(substring(a.transaction_date_time,6,4),'0',substring(a.transaction_date_time,1,1),substring(a.transaction_date_time,3,2)) 
+                
+        when   substring(a.transaction_date_time,3,1) = '/' and  substring(a.transaction_date_time,5,1) = '/' then
+        concat(substring(a.transaction_date_time,6,4),substring(a.transaction_date_time,1,2),'0',substring(a.transaction_date_time,4,1)) 
+        
+        when   substring(a.transaction_date_time,3,1) = '/' and  substring(a.transaction_date_time,6,1) = '/' then
+        concat(substring(a.transaction_date_time,7,4),substring(a.transaction_date_time,1,2),substring(a.transaction_date_time,4,2))
+        
+        when   substring(a.transaction_date_time,4,1) = 'J' then
+        concat(substring(a.transaction_date_time,8,4),'01',substring(a.transaction_date_time,1,2))
+        
+        when   substring(a.transaction_date_time,4,1) = 'F' then
+        concat(substring(a.transaction_date_time,8,4),'02',substring(a.transaction_date_time,1,2))
+        
+        when   substring(a.transaction_date_time,4,1) = 'D' then
+        concat(substring(a.transaction_date_time,8,4),'12',substring(a.transaction_date_time,1,2))
+        
+        end as transdate,
+        
+        
+        case 
+        when   substring(a.transaction_date_time,2,1) = '/' and  substring(a.transaction_date_time,4,1) = '/' then
+        ltrim(substring(a.transaction_date_time,9)) 
+        
+        when   substring(a.transaction_date_time,2,1) = '/' and  substring(a.transaction_date_time,5,1) = '/' then
+        ltrim(substring(a.transaction_date_time,10))
+        
+        when   substring(a.transaction_date_time,3,1) = '/' and  substring(a.transaction_date_time,5,1) = '/' then
+        ltrim(substring(a.transaction_date_time,10))
+        
+        when   substring(a.transaction_date_time,3,1) = '/' and  substring(a.transaction_date_time,6,1) = '/' then
+        ltrim(substring(a.transaction_date_time,11))
+        
+        when   substring(a.transaction_date_time,4,1) = 'J' then
+        ltrim(substring(a.transaction_date_time,12))
+        
+        when   substring(a.transaction_date_time,4,1) = 'F' then
+        ltrim(substring(a.transaction_date_time,12))
+        
+        when   substring(a.transaction_date_time,4,1) = 'D' then
+        ltrim(substring(a.transaction_date_time,12))
+        
+        
+        end as transtime,
+        a.payer_mfs_provider as PayerMFSProvider, 
+        a.payer_payment_instrument as PayerPaymentInstrument, 
+        a.payer_wallet_type_linked_bank as PayerWalletTypeLinkedBank, 
+        a.user_category as UserCategory, 
+        a.user_grade as UserGrade, 
+        a.payer_bank_account_no_mobile_no as PayerID, 
+        a.payee_mfs_provider as PayeeMFSProvider, 
+        a.receiver_category as ReceiverCategory, 
+        a.receiver_grade as ReceiverGrade, 
+        a.payee_payment_instrument as PayeePaymentInstrument, 
+        a.payee_wallet_type_linked_bank as PayeeWalletTypeLinkedBank, 
+        a.payee_bank_account_no_mobile_no as PayeeID, 
+        a.transaction_amount as TransAmount, 
+        a.fee_service_plustax as FeeServicePlusTax, 
+        a.fee_service_minustax as FeeServiceMinusTax, 
+        a.payer_previous_balance as PayerPreviousBalance, 
+        a.payer_post_balance as PayerPostBalance, 
+        a.payee_pre_balance as PayeePreBalance, 
+        a.payee_post_balance as PayeePostBalance, 
+        a.service_type as ServiceType, 
+        a.transaction_status as TransactionStatus, 
+        a.buffer1, 
+        a.buffer2, 
+        a.buffer3
+     --   ltrim(substring(a.transactiondate,9)) as time
+from wallet2 a 
+where transaction_amount is not null
